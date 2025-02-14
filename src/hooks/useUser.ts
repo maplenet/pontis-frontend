@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { User, CreateUserInput } from '../types/user';
-import { customerApi } from '../services/api';
+import { useState } from "react";
+import { User, CreateUserInput } from "../types/user";
+import { customerApi } from "../services/api";
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
@@ -14,7 +14,24 @@ export function useUser() {
       const data = await customerApi.getCustomerById(customerId);
       setUser(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al obtener el cliente');
+      setError(
+        err instanceof Error ? err.message : "Error al obtener el cliente"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteUser = async (customerId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      await customerApi.deleteCustomer(customerId);
+      setUser(null);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Error al eliminar el cliente"
+      );
     } finally {
       setLoading(false);
     }
@@ -28,7 +45,9 @@ export function useUser() {
       setUser(newUser);
       return newUser;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear el cliente');
+      setError(
+        err instanceof Error ? err.message : "Error al crear el cliente"
+      );
       throw err;
     } finally {
       setLoading(false);
@@ -43,7 +62,9 @@ export function useUser() {
       setUser(updatedUser);
       return updatedUser;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al actualizar el cliente');
+      setError(
+        err instanceof Error ? err.message : "Error al actualizar el cliente"
+      );
       throw err;
     } finally {
       setLoading(false);
@@ -61,7 +82,11 @@ export function useUser() {
       }
       await fetchUserById(customerId);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cambiar el estado del cliente');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Error al cambiar el estado del cliente"
+      );
       throw err;
     } finally {
       setLoading(false);
@@ -75,6 +100,7 @@ export function useUser() {
     fetchUserById,
     createUser,
     updateUser,
-    toggleUserStatus
+    toggleUserStatus,
+    deleteUser,
   };
 }
