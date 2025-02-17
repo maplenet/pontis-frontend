@@ -39,7 +39,6 @@ export function ActivateCustomerModal({
     setError(null);
     setSearching(true);
 
-    console.log("searching", searchTerm);
     try {
       const customer = await activationApi.searchCustomer(searchTerm);
       if (customer) {
@@ -60,22 +59,28 @@ export function ActivateCustomerModal({
 
   const getPackageInfo = (planId: number) => {
     switch (planId) {
-      case 11:
+      case 6:
         return {
           serviceMenuId: 6212,
-          name: "M+ Paquete Básico",
+          name: "M+ ESTÁNDAR",
           serviceId: 78100,
         };
-      case 12:
+      case 8:
         return {
           serviceMenuId: 6217,
-          name: "M+ DEPORTE",
+          name: "M+ PREMIUM",
+          serviceId: 78104,
+        };
+      case 9:
+        return {
+          serviceMenuId: 6217,
+          name: "M+ PREMIUM + HBO",
           serviceId: 78104,
         };
       default:
         return {
           serviceMenuId: 6212,
-          name: "M+ DEPORTE",
+          name: "M+ ESTÁNDAR",
           serviceId: 78100,
         };
     }
@@ -117,7 +122,7 @@ export function ActivateCustomerModal({
                   htmlFor="searchTerm"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Buscar por carnet de identidad
+                  Buscar por correo electrónico
                 </label>
                 <div className="mt-1 relative">
                   <input
@@ -126,7 +131,7 @@ export function ActivateCustomerModal({
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    placeholder="CI..."
+                    placeholder="Correo electrónico"
                     disabled={searching || loading}
                   />
                   <button

@@ -39,7 +39,6 @@ export const activationApi = {
       ci: searchTerm,
     });
     const contact = response.data;
-    console.log(contact);
     if (!contact) {
       throw new Error("Cliente no encontrado");
     }
