@@ -174,7 +174,7 @@ export function ActivateCustomerModal({
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      CI
+                      CI/NIT
                     </label>
                     <p className="mt-1 text-sm text-gray-900">
                       {customerData.ci}
