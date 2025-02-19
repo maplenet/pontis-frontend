@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { User, CreateUserInput } from "../types/user";
+import { User, CreateUserInput, GetUsersParams } from "../types/user";
 import { customerApi } from "../services/api";
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,6 +18,23 @@ export function useUser() {
       setError(
         err instanceof Error ? err.message : "Error al obtener el cliente"
       );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAllUsers = async (userParams: GetUsersParams) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const users = await customerApi.getAllCustomers(userParams);
+      setUsers(users);
+      return users;
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Error al obtener los clientes"
+      );
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -95,9 +113,11 @@ export function useUser() {
 
   return {
     user,
+    users,
     loading,
     error,
     fetchUserById,
+    getAllUsers,
     createUser,
     updateUser,
     toggleUserStatus,

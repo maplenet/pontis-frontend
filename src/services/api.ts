@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User, CreateUserInput } from "../types/user";
+import { User, CreateUserInput, GetUsersParams } from "../types/user";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const USER = import.meta.env.VITE_PONTIS_LOGIN_USER;
@@ -24,6 +24,31 @@ export const customerApi = {
       throw new Error("Cliente no encontrado");
     }
     return user;
+  },
+  getAllCustomers: async (userParams: GetUsersParams) => {
+    const {
+      entriesPerPage,
+      filterBy,
+      orderBy,
+      pageNumber,
+      searchString,
+      sortType,
+    } = userParams;
+
+    await loginService();
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/customers/getCustomers?entriesPerPage=${entriesPerPage}&filterBy=${filterBy}&orderBy=${orderBy}&pageNumber=${pageNumber}&searchString=${searchString}&sortType=${sortType}`
+      );
+      const users = await response.data.response.customerList;
+      return users;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message || "Error al obtener los clientes");
+      } else {
+        throw new Error("Error al obtener los clientes");
+      }
+    }
   },
 
   deleteCustomer: async (customerId: string) => {
