@@ -16,9 +16,9 @@ const loginService = async () => {
 export const customerApi = {
   getCustomerById: async (customerId: string) => {
     await loginService();
-    const response = await axios.post(`${API_BASE_URL}/customers/getCustomer`, {
-      customerId,
-    });
+    const response = await axios.get(
+      `${API_BASE_URL}/customers/getCustomer/${customerId}`
+    );
     const user = response.data.response;
     if (!user) {
       throw new Error("Cliente no encontrado");
