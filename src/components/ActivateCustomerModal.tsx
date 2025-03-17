@@ -41,6 +41,10 @@ export function ActivateCustomerModal({
 
     try {
       const customer = await activationApi.searchCustomer(searchTerm);
+      if (customer.status === 400) {
+        setError(customer.detail);
+        return;
+      }
       if (customer) {
         const customerId = await activationApi.generateCustomerId();
         setCustomerData({

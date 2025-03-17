@@ -32,18 +32,25 @@ const API_ODOO_URL = import.meta.env.VITE_API_ODOO_URL;
 let lastCustomerId = 32;
 
 export const activationApi = {
-  searchCustomer: async (
-    searchTerm: string
-  ): Promise<ExternalCustomer | null> => {
-    const response = await axios.post(`${API_ODOO_URL}/users/search_contact`, {
-      ci: searchTerm,
-    });
-    const contact = response.data;
-    if (!contact) {
-      throw new Error("Cliente no encontrado");
+  searchCustomer: async (searchTerm: string) => {
+    try {
+      const response = await axios.post(
+        `${API_ODOO_URL}/users/search_contact`,
+        {
+          ci: searchTerm,
+        }
+      );
+      const contact = response.data;
+      if (!contact) {
+        throw new Error("Cliente no encontrado");
+      }
+      lastCustomerId = parseInt(contact.id);
+      return contact;
+    } catch (err) {
+      const detail = err.response.data.detail;
+      console.error(detail);
+      return { status: 400, detail };
     }
-    lastCustomerId = parseInt(contact.id);
-    return contact;
   },
   activateCustomer: async (idContact: number) => {
     const response = await axios.post(
